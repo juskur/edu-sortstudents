@@ -20,15 +20,15 @@ public class FileSourceLoader extends SourceLoaderBasic {
         setFileName(fileName);
     }
 
-    private void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     @Override
     public List<Student> load() {
         clear();
         readStudentsFromFile(getFileName());
         return getStudentList();
+    }
+
+    private void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     private String getFileName() {

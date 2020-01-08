@@ -21,10 +21,12 @@ public abstract class SourceLoaderBasic implements SourceLoader {
         validationExceptions = new ArrayList<>();
     }
 
-    protected void throwExceptions() throws ValidationException {
-        if (validationExceptions.size() > 0) {
-            throw validationExceptions.get(0);
-        }
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void addStudent(Student student) {
+        studentList.add(student);
     }
 
     public List<ValidationException> getErrors() {
@@ -33,14 +35,6 @@ public abstract class SourceLoaderBasic implements SourceLoader {
 
     protected void addValidationException(ValidationException e) {
         validationExceptions.add(e);
-    }
-
-    public List<Student> getStudentList() {
-        return studentList;
-    }
-
-    public void addStudent(Student student) {
-        studentList.add(student);
     }
 
     @Override

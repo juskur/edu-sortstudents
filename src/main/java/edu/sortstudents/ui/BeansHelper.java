@@ -28,4 +28,11 @@ public interface BeansHelper {
         errors.stream().forEach((e) -> {addErrorMessage("Student format error", e.getMessage());});
     }
 
+    static void displayAllErrors(List<ValidationException> exceptions) {
+        exceptions.stream().forEach((e) -> {
+            BeansHelper.addErrorMessage("Error", e.getMessage());
+        });
+    }
+
+
 }

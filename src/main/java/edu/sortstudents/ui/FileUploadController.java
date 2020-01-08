@@ -64,16 +64,10 @@ public class FileUploadController implements Serializable {
         SourceLoader loader = new StreamSourceLoader(reader.lines());
         List<Student> studentList = loader.load();
         if (loader.hasErrors()) {
-            displayAllErrors(loader.getErrors());
+            BeansHelper.displayAllErrors(loader.getErrors());
         } else {
             getStudentsBacking().getStudents().addAll(studentList);
         }
-    }
-
-    private static void displayAllErrors(List<ValidationException> exceptions) {
-        exceptions.stream().forEach((e) -> {
-            BeansHelper.addErrorMessage("Error", e.getMessage());
-        });
     }
 
     private void updateDisplayResults() {

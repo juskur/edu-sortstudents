@@ -15,7 +15,6 @@ public class StringSourceLoader extends SourceLoaderBasic {
     public static String SEPARATOR = ";";
 
     private String source;
-    private String saved;
 
     public StringSourceLoader(String source) {
         this.source = source;

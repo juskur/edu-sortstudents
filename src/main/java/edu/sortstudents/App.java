@@ -46,13 +46,6 @@ public class App  {
         return studentList;
     }
 
-    protected static void saveResult(String [] args, SortResult sortResult) throws ValidationException {
-        String resultFileName = getResultFileName(args);
-        if (resultFileName != null && sortResult.getSortedStudents() != null) {
-            writeStudentsToFile(resultFileName, sortResult.getSortedStudents());
-        }
-    }
-
     private static void checkArguments(String[] args) throws ValidationException {
         if (args == null || args.length < 1) {
             throw new ValidationException("Run java edu.sortstudents.App -cp ./target/edu-sortstudents-1.0-SNAPSHOT.jar students.txt [results.txt]");
@@ -94,6 +87,13 @@ public class App  {
 
     private static void printOutSeparator() {
         System.out.println("-----------------------------------------");
+    }
+
+    protected static void saveResult(String [] args, SortResult sortResult) throws ValidationException {
+        String resultFileName = getResultFileName(args);
+        if (resultFileName != null && sortResult.getSortedStudents() != null) {
+            writeStudentsToFile(resultFileName, sortResult.getSortedStudents());
+        }
     }
 
     private static void writeStudentsToFile(String fileName, List<Student> studentList) throws ValidationException {
