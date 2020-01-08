@@ -1,6 +1,5 @@
 package edu.sortstudents.model.impl.sourceloaders;
 
-import com.sun.org.apache.xpath.internal.operations.String;
 import edu.sortstudents.model.data.Student;
 import edu.sortstudents.model.validators.ValidationException;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,7 @@ class StringSourceLoaderTest {
     void loadFromString() throws ValidationException {
         StringSourceLoader loader = new StringSourceLoader("Student2,6.5;Student3,5.0;Student1,8.5");
         List<Student> studentList = loader.load();
+        assertFalse(loader.hasErrors(), "Errors while loading valid string encountered");
         assertNotNull(studentList, "Student list is null");
         assertTrue(studentList.size() == 3, "Not three students");
         assertTrue(studentList.get(1).getName().equals("Student3"), "Name is not correct");

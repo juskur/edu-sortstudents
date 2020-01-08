@@ -1,0 +1,8 @@
+joinfaces:
+  jsf:
+    PROJECT_STAGE: Development
+  primefaces:
+    theme: overcast
+logging:
+  level:
+    edu.*: DEBUG

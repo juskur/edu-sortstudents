@@ -8,91 +8,45 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
-public class FileSourceLoader extends SourceLoaderConfigurable {
+public class FileSourceLoader extends SourceLoaderBasic {
 
-    public static String FILE_NAME = "file";
-    public static String FILE_NAME_RESULTS = "results";
-    private List<Student> studentList = null;
-    private List<ValidationException> validationExceptions = null;
+    private String fileName;
 
-    public FileSourceLoader(Map config) {
-        super(config);
+    public FileSourceLoader(String fileName) {
+        super();
+        setFileName(fileName);
+    }
+
+    private void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     @Override
-    public List<Student> load() throws ValidationException {
+    public List<Student> load() {
         clear();
-        readStudentsFromFile(getFileName(FILE_NAME));
-        throwExceptions();
-        return studentList;
+        readStudentsFromFile(getFileName());
+        return getStudentList();
     }
 
-    @Override
-    public void save(List<Student> studentList) throws ValidationException {
-        clear();
-        writeStudentsToFile(getFileName(FILE_NAME_RESULTS), studentList);
-        throwExceptions();
-    }
-
-    private void writeStudentsToFile(String fileName, List<Student> studentList) throws ValidationException {
-        Path path = Paths.get(fileName);
-        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            studentList.stream().forEach(s -> {
-                try {
-                    writer.write(s.toString());
-                    writer.write(System.lineSeparator());
-                } catch (IOException e) {
-                    addValidationException(new ValidationException("Student writing to file error: " + e.getMessage()));
-                }
-            });
-        } catch (Exception e) {
-            throw new ValidationException("Writing to file failed " + e.getMessage());
-        }
-    }
-
-    private void clear() {
-        studentList = new ArrayList<>();
-        validationExceptions = new ArrayList<>();
-    }
-
-    private String getFileName(String configKey) throws ValidationException {
-        String fileName = getConfig().get(configKey);
+    private String getFileName() {
         if (fileName == null || "".equals(fileName.trim())) {
-            throw new ValidationException(configKey + " config entry missing ");
+            addValidationException(new ValidationException("fileName is missing "));
         }
         return fileName;
     }
 
-    private void readStudentsFromFile(String fileName) throws ValidationException {
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(l -> {
-                try {
-                    addStudent(l);
-                } catch (ValidationException e) {
-                    addValidationException(e);
-                }
-            });
-        } catch (Exception e) {
-            throw new ValidationException("Error while reading file");
+    private void readStudentsFromFile(String fileName) {
+        readStudentsFromPath(Paths.get(fileName));
+    }
+
+    protected void readStudentsFromPath(Path path) {
+        try (Stream<String> stream = Files.lines(path)) {
+            StringSourceLoaderHelper.readStudentsFromStream(stream, this);
+        } catch (IOException e) {
+            addValidationException(new ValidationException(String.format("Reading from file failed: %s", e.getMessage())));
         }
-    }
-
-    private void throwExceptions() throws ValidationException {
-        if (validationExceptions.size() > 0) {
-            throw validationExceptions.get(0);
-        }
-    }
-
-    private void addStudent(String line) throws ValidationException {
-        studentList.add(StringSourceLoaderHelper.load(line));
-    }
-
-    private void addValidationException(ValidationException e) {
-        validationExceptions.add(e);
     }
 }

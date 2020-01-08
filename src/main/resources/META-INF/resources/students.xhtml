@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Students Sort</title>
+</h:head>
+<h:body>
+    <h1>Upload Students List</h1>
+
+    <p:growl id="messages" showDetail="true"/>
+
+    <h:form enctype="multipart/form-data" style="margin: 0;">
+        <h:panelGrid columns="6" style="margin: 0;">
+            <p:fileUpload value="#{fileUploadController.file}" mode="simple" skinSimple="true"
+                          fileUploadListener="#{fileUploadController.uploadListener}" label="Choose File"/>
+            <p:commandButton value="Upload File" action="#{fileUploadController.upload}"
+                             ajax="false" partialSubmit="false" update="studentsTable"/>
+            <p:outputLabel for="algorithmType" value="Sort Algorithm:"/>
+            <p:selectOneRadio id="algorithmType" value="#{studentsBacking.algorithmType}" unselectable="true">
+                <f:selectItem itemLabel="Bubble" itemValue="BUBBLE"/>
+                <f:selectItem itemLabel="Heap" itemValue="HEAP"/>
+                <f:selectItem itemLabel="Merge" itemValue="MERGE"/>
+            </p:selectOneRadio>
+            <p:commandButton value="Sort" update="studentsTable" action="#{sortController.sort}"
+                             ajax="false" partialSubmit="false"/>
+            <p:commandButton value="Download" ajax="false" disabled="true">
+                <p:fileDownload value="#{fileUploadController.file}"/>
+            </p:commandButton>
+        </h:panelGrid>
+    </h:form>
+
+    <h:panelGrid columns="2" style="margin:0;">
+        <p:outputLabel value="#{studentsBacking.recordsCountText}"/>
+        <p:outputLabel value="#{studentsBacking.sortTimeText}"/>
+    </h:panelGrid>
+
+    <p:dataTable id="studentsTable" var="student" value="#{studentsBacking.students}"
+                 scrollable="true" scrollHeight="400">
+        <p:column headerText="Name">
+            <h:outputText value="#{student.name}"/>
+        </p:column>
+        <p:column headerText="Performance">
+            <h:outputText value="#{student.performance}"/>
+        </p:column>
+    </p:dataTable>
+</h:body>
+</html>

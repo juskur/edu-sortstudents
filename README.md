@@ -1,11 +1,9 @@
 # edu-sortstudents
 Sorting Students by Performance
 
-##
-after mvn clean install run to display sorted students:
+mvn clean install first
+## Webapp
+Run sorted students web application http://localhost:8080/:
 
-java -jar target\edu-sortstudents-1.0-SNAPSHOT.jar students.txt 
+java -jar target\edu-sortstudents-1.0-SNAPSHOT.jar
 
-or to display sorted students and save them to file results txt:
-
-java -jar target\edu-sortstudents-1.0-SNAPSHOT.jar students.txt result.txt

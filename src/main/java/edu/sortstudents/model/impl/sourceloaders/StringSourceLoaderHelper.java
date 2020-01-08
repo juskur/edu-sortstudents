@@ -4,6 +4,7 @@ import edu.sortstudents.model.data.Student;
 import edu.sortstudents.model.validators.ValidationException;
 
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 public interface StringSourceLoaderHelper {
 
@@ -41,4 +42,18 @@ public interface StringSourceLoaderHelper {
         }
         return performance;
     }
+
+    static void readStudentsFromStream(Stream<String> lines, SourceLoaderBasic sourceLoaderBasic) {
+        if (lines == null) {
+            return;
+        }
+        lines.forEach(l -> {
+            try {
+                sourceLoaderBasic.addStudent(StringSourceLoaderHelper.load(l));
+            } catch (ValidationException e) {
+                sourceLoaderBasic.addValidationException(e);
+            }
+        });
+    }
+
 }
